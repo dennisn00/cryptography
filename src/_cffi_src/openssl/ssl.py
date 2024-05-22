@@ -113,6 +113,22 @@ static const long SSL_MODE_AUTO_RETRY;
 static const long TLS_ST_BEFORE;
 static const long TLS_ST_OK;
 
+static const long SSL_EXT_TLS_ONLY;
+static const long SSL_EXT_DTLS_ONLY;
+static const long SSL_EXT_TLS_IMPLEMENTATION_ONLY;
+static const long SSL_EXT_SSL3_ALLOWED;
+static const long SSL_EXT_TLS1_2_AND_BELOW_ONLY;
+static const long SSL_EXT_TLS1_3_ONLY;
+static const long SSL_EXT_IGNORE_ON_RESUMPTION;
+static const long SSL_EXT_CLIENT_HELLO;
+static const long SSL_EXT_TLS1_2_SERVER_HELLO;
+static const long SSL_EXT_TLS1_3_SERVER_HELLO;
+static const long SSL_EXT_TLS1_3_ENCRYPTED_EXTENSIONS;
+static const long SSL_EXT_TLS1_3_HELLO_RETRY_REQUEST;
+static const long SSL_EXT_TLS1_3_CERTIFICATE;
+static const long SSL_EXT_TLS1_3_NEW_SESSION_TICKET;
+static const long SSL_EXT_TLS1_3_CERTIFICATE_REQUEST;
+
 static const long SSL3_VERSION;
 static const long TLS1_VERSION;
 static const long TLS1_1_VERSION;
@@ -160,7 +176,10 @@ X509 *SSL_get_peer_certificate(const SSL *);
 int SSL_get_ex_data_X509_STORE_CTX_idx(void);
 void SSL_set_verify(SSL *, int, int (*)(int, X509_STORE_CTX *));
 int SSL_get_verify_mode(const SSL *);
-
+int SSL_is_server(const SSL *);
+void *SSL_get_ex_data(const SSL *, int);
+int SSL_set_ex_data(SSL *, int, void *);
+ 
 long SSL_get_extms_support(SSL *);
 
 X509_VERIFY_PARAM *SSL_get0_param(SSL *);
@@ -197,6 +216,8 @@ int SSL_CTX_use_certificate_chain_file(SSL_CTX *, const char *);
 int SSL_CTX_use_PrivateKey(SSL_CTX *, EVP_PKEY *);
 int SSL_CTX_use_PrivateKey_file(SSL_CTX *, const char *, int);
 int SSL_CTX_check_private_key(const SSL_CTX *);
+void *SSL_CTX_get_ex_data(const SSL_CTX *, int);
+int SSL_CTX_set_ex_data(SSL_CTX *, int, void *);
 
 void SSL_CTX_set_cookie_generate_cb(SSL_CTX *,
                                     int (*)(
