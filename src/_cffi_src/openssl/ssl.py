@@ -383,31 +383,33 @@ size_t DTLS_get_data_mtu(SSL *);
 
 
 /* Custom extensions. */
-typedef int (*custom_ext_add_cb)(SSL *, unsigned int,
-                                 const unsigned char **,
-                                 size_t *, int *,
-                                 void *);
+typedef int (*SSL_custom_ext_add_cb_ex)(SSL *s, unsigned int ext_type,
+                                        unsigned int context,
+                                        const unsigned char **out,
+                                        size_t *outlen, X509 *x,
+                                        size_t chainidx, int *al,
+                                        void *add_arg);
 
-typedef void (*custom_ext_free_cb)(SSL *, unsigned int,
-                                   const unsigned char *,
-                                   void *);
+typedef void (*SSL_custom_ext_free_cb_ex)(SSL *s, unsigned int ext_type,
+                                          unsigned int context,
+                                          const unsigned char *out,
+                                          void *add_arg);
 
-typedef int (*custom_ext_parse_cb)(SSL *, unsigned int,
-                                   const unsigned char *,
-                                   size_t, int *,
-                                   void *);
+typedef int (*SSL_custom_ext_parse_cb_ex)(SSL *s, unsigned int ext_type,
+                                          unsigned int context,
+                                          const unsigned char *in,
+                                          size_t inlen, X509 *x,
+                                          size_t chainidx, int *al,
+                                          void *parse_arg);
 
-int SSL_CTX_add_client_custom_ext(SSL_CTX *, unsigned int,
-                                  custom_ext_add_cb,
-                                  custom_ext_free_cb, void *,
-                                  custom_ext_parse_cb,
-                                  void *);
-
-int SSL_CTX_add_server_custom_ext(SSL_CTX *, unsigned int,
-                                  custom_ext_add_cb,
-                                  custom_ext_free_cb, void *,
-                                  custom_ext_parse_cb,
-                                  void *);
+int SSL_CTX_add_custom_ext(SSL_CTX *ctx, unsigned int ext_type,
+                           unsigned int context,
+                           SSL_custom_ext_add_cb_ex add_cb,
+                           SSL_custom_ext_free_cb_ex free_cb,
+                           void *add_arg,
+                           SSL_custom_ext_parse_cb_ex parse_cb,
+                           void *parse_arg);
+                           
 
 int SSL_extension_supported(unsigned int);
 
